@@ -4,9 +4,9 @@ on:
     branches: 
       - master
       - develop
-      - ci*
-      - feature*
-      - release*
+      - ci.*
+      - feature.*
+      - release.*
   pull_request:
     branches:
       - master
