@@ -1,18 +1,33 @@
 name: Lint
 on:
+  issue_comment:
+    types:
+      - created
   push:
     branches: 
       - main
       - develop
-      - ci.*
-      - feature.*
-      - release.*
+      - ci/**
+      - feature/**
+      - release/**
   pull_request:
     branches:
       - main
       - develop
 
 jobs:
+  pr_commented:
+    name: PR comment
+    if: ${{ github.event.issue.pull_request }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo A comment on PR $NUMBER
+          echo "${{toJSON(github.event)}}"
+        env:
+          NUMBER: ${{ github.event.issue.number }}
+
+
   tflint:
     runs-on: ubuntu-latest
 
