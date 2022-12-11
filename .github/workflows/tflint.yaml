@@ -49,7 +49,7 @@ jobs:
       run: tflint --version
 
     - name: Terraform init
-      run: tflint --init
+      run: terraform init
 
     - name: Init TFLint
       run: tflint --init
