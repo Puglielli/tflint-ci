@@ -5,7 +5,6 @@ terraform {
     }
 
   }
-    backend "remote" {}
 }
 
 // Comments about resource sqs

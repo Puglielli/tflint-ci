@@ -1,0 +1,77 @@
+name: Terraform CI
+on:
+  issue_comment:
+    types:
+      - created
+  push:
+    branches: 
+      - main
+      - develop
+      - ci/**
+      - feature/**
+      - release/**
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  formatter:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@v2
+    
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.1.7
+    
+    - name: Show Terraform version
+      run: terraform version
+
+    - name: Apply Terraform formatter
+      run: terraform fmt -recursive
+      
+  tflint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@v2
+
+    - name: Setup TFLint
+      uses: terraform-linters/setup-tflint@v2
+      with:
+        tflint_version: v0.38.1
+
+    - name: Show TFLint version
+      run: tflint --version
+
+    - name: Terraform init
+      run: terraform init
+
+    - name: Init TFLint
+      run: tflint --init
+
+    - name: Run TFLint
+      run: tflint -f compact
+
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@v2
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.1.7
+
+    - name: Terraform init
+      run: terraform init
+
+    - name: Terraform formatter
+      run: terraform validate
